@@ -1,0 +1,126 @@
+@import "../../_base.scss";
+
+.sidebar {
+  background: $black-secondary;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 90vh;
+  padding-top: 2rem;
+  transition: transform 0.2s ease-in;
+  position: fixed;
+  z-index: 1;
+  top: 10vh;
+  left: 0;
+
+  a {
+    color: $sid-text-color;
+    &:hover {
+      color: $text-color;
+      text-decoration: none;
+    }
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.5rem;
+    margin: 0.2rem 0;
+    cursor: pointer;
+    color: $sid-text-color;
+    span {
+      margin-left: 1rem;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+    }
+    &:hover {
+      background-color: $border-color;
+    }
+  }
+  hr {
+    background-color: $border-color;
+  }
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: $breakpoint-medium) {
+  .sidebar {
+    width: 90px;
+    li {
+      justify-content: center;
+    }
+    span {
+      display: none;
+    }
+  }
+  .pagesidebar {
+    width: 100%;
+    &.open {
+      background-color: red;
+      position: fixed;
+      margin-left: 90px !important;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 999;
+  }
+}
+
+.pagesidebar {
+  // padding: 0.5rem 0;
+  font-size: 0.8rem;
+  display: flex;
+  overflow-x: scroll;
+  justify-content: center;
+  z-index: 1;
+  margin-left: 0px;
+  margin-right: -12px;
+  top: 10vh;
+  left: 0;
+  box-shadow: 0 7px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  a {
+    color: $text-color;
+    &:hover {
+    }
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.5rem;
+    margin: 0.2rem 0;
+    cursor: pointer;
+    span {
+      margin-left: 1rem;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+    }
+    &:hover {
+      // background-color: $border-color;
+      border-bottom: 1px solid #aaa;
+    }
+  }
+  hr {
+    background-color: $border-color;
+  }
+  &.open {
+    background-color: rgb(243, 243, 240);
+    position: fixed;
+    width: 1127px;
+    justify-content: center;
+    align-items: center;
+    margin-left: 240px;
+    height: 60px;
+    padding-top: 10px;
+  }
+}
