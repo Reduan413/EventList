@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from 'react'
 import '../../_app.scss'
-import PagesScreen from '../../screens/homeScreen/PagesScreen'
+import PagesScreen from '../../screens/homeScreen/MyPagesScreen'
 import PageHome from './PageHome'
 import PageHeader from '../header/PageHeader'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import '../sidebar/_sidebar.scss'
 import PageProfile from '../setting/PageProfile'
+import PostPage from '../page/PostPage'
 
 const PageIndex = () => {
     const [navbar, setNavbar] = useState(false);
@@ -24,9 +25,8 @@ const PageIndex = () => {
       <PageHeader/>
         <Tabs>
           <TabList className={navbar ? 'pagesidebar open': 'pagesidebar'}>
-            <Tab>Home</Tab>
-            <Tab>Posts</Tab>
-            <Tab>About</Tab>
+          <Tab>Home</Tab>
+            <Tab>Post</Tab>
             <Tab>Setting</Tab>
           </TabList>
 
@@ -34,10 +34,7 @@ const PageIndex = () => {
             <PageHome/>
           </TabPanel>
           <TabPanel>
-            <h2>Any content post</h2>
-          </TabPanel>
-          <TabPanel>
-            <h2>Any content about</h2>
+            <PostPage/>
           </TabPanel>
           <TabPanel>
             <PageProfile/>

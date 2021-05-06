@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import './_event.scss'
 import { AiFillEye } from 'react-icons/ai'
 import { Card } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 
 const Event = () => {
 
@@ -23,6 +24,10 @@ const Event = () => {
                 <div className="event__channel">
                     <img src="https://yt3.ggpht.com/ytc/AAUvwnjjl7sUdeyZ4pGOobMQnFM-U91gh1rZ40hvg1NONQ=s48-c-k-c0x00ffffff-no-rj" alt="" />
                     <p>True Coder</p>
+                </div>
+                <hr/>
+                <div className="event__button">
+                   <Link to = ''><button className="btn btn-info btn-block">View Details</button></Link>
                 </div>
             </div>
         </Card>

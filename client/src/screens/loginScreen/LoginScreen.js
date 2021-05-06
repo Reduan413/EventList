@@ -10,6 +10,9 @@ export default class LoginScreen extends Component {
             isLogginActive: true
         };
     }
+    handleRegUser = () => {
+        this.setState({isLogginActive: true})
+    }
 
     componentDidMount() {
         //Add .right by default
@@ -40,7 +43,7 @@ export default class LoginScreen extends Component {
                         <Login containerRef={ref => (this.current = ref)} />
                     )}
                     {!isLogginActive && (
-                        <Register containerRef={ref => (this.current = ref)} />
+                        <Register  onReg={this.handleRegUser} containerRef={ref => (this.current = ref)} />
                     )}
                 </div> 
                 <RightSide

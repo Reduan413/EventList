@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import {Row, Container, Col} from 'react-bootstrap'
-import Event from '../../components/event/Event'
+import { MdAllOut } from 'react-icons/md'
+import All from './All.js'
 
-const HomeScreen = () => {
+const FollowingPage = () => {
     return (
         <Container>
-            <Row style={{marginTop:10}}>
+            <Row style={{marginTop:0}}>
                 {[...new Array(20)].map(() => (
-                    <Col lg={4} md={6}>
-                        <Event/>
+                    <Col>
+                        <All/>
                     </Col>
                 ))} 
             </Row>   
@@ -16,4 +17,4 @@ const HomeScreen = () => {
     )
 }
 
-export default HomeScreen
+export default FollowingPage

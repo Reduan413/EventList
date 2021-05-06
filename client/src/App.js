@@ -7,8 +7,13 @@ import LoginScreen from './screens/loginScreen/LoginScreen'
 import Profile from './components/setting/Profile'
 import './_app.scss'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import PagesScreen from './screens/homeScreen/PagesScreen'
+import { Provider } from 'react-redux'
+import store from './redux/store'
 import PageIndex from './components/page/PageIndex'
+import LikePage from './screens/homeScreen/LikeEvent'
+import PagesScreen from './screens/pagesScreen/PagesScreen'
+import OwnPage from './components/createPage/OwnPage'
+import InterstedEvent from './components/intersted/InterstedEvent'
 
 
 const Layout = ({children}) => {
@@ -29,6 +34,7 @@ const Layout = ({children}) => {
 }
 const App = () => {
    return (
+    <Provider store={store}>
       <Switch>
         <Route path="/" exact>
           <Layout>
@@ -58,10 +64,21 @@ const App = () => {
             <PagesScreen/>
           </Layout>
         </Route>
+        <Route path="/intersted" exact>
+          <Layout>
+            <InterstedEvent/>
+          </Layout>
+        </Route>
+        <Route path="/mypages" exact>
+          <Layout>
+            <OwnPage/>
+          </Layout>
+        </Route>
         <Route>
           <Redirect to="/" />
         </Route>
       </Switch>
+    </Provider>
   )
 }
 

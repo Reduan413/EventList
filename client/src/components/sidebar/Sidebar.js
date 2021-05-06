@@ -11,6 +11,7 @@ import {
     MdSentimentDissatisfied,
 } from 'react-icons/md'
 import { RiStackFill } from "react-icons/ri";
+import { AiFillStar } from "react-icons/ai";
 import { BiUserPin } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 
@@ -23,21 +24,25 @@ const Sidebar = ({ sidebar, handleToggleSidebar }) => {
                     <span>Home</span> 
                 </li>
             </Link>
-            <li>
-                <RiStackFill size={23}/>
-                <span>Following Pages</span> 
-            </li>
-            <li>
-                <MdThumbUp size={23}/>
-                <span>Like Events</span> 
-            </li>
+            <Link to = '/pages'>
+                <li>
+                    <RiStackFill size={23}/>
+                    <span>Pages</span> 
+                </li>
+            </Link>
+            <Link to = '/intersted'>
+                <li>
+                    <AiFillStar size={23}/>
+                    <span>Interested</span> 
+                </li>
+            </Link>
             <Link to='/profile'>
                 <li>
                     <BiUserPin size={23}/>
                     <span>Profile</span> 
                 </li>
             </Link>
-            <Link to='/pages'>
+            <Link to='/mypages'>
                 <li>
                     <MdLibraryBooks size={23}/>
                     <span>My Pages</span> 
