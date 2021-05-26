@@ -32,6 +32,6 @@ app.use("/event", event)
 //     res.status(500).json({error: err})
 // }
 
-app.listen(3001, ()=>{
+app.listen(3002, ()=>{
     console.log(`app listening at port 3001`)
 })

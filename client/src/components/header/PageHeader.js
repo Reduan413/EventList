@@ -16,7 +16,7 @@ const PageHeader = (props) => {
                     </div>
                     <div className="page__name">
                         <h1>{props.data.name}</h1>
-                        <p>500 followers</p>
+                        <p>{props.data.likes.length} followers</p>
                     </div>
                     <div className="page__follow">
                         <button className="page__btn btn btn-primary">Follow</button>
