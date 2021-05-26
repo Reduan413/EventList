@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react'
 import '../../_app.scss'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import AllPages from '../../components/pages/AllPages'
-import FollowingPage from '../../components/pages/FollowingPage'
+import All from '../../components/pages/All'
+import Following from '../../components/pages/Following'
 
 const PagesScreen = () => {
   const [navbar, setNavbar] = useState(false);
@@ -24,10 +24,10 @@ const PagesScreen = () => {
           </TabList>
 
           <TabPanel>
-            <AllPages/>
+            <All/>
           </TabPanel>
           <TabPanel>
-            <FollowingPage/>
+            <Following/>
           </TabPanel>
         </Tabs>   
         </>

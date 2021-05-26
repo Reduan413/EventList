@@ -52,7 +52,7 @@ const CreatePage = (props) => {
                     </Modal.Header>
                     <Modal.Body>
                     <div className="form">
-                        <form onSubmit={(e)=>createPageSubmit(e)}>
+                        <form onSubmit={createPageSubmit}>
                             <div className="form-group">
                                 <label htmlFor="pageName">Page Information</label>
                                 <input type="text" id="pageName" value={data.pageName} onChange={(e) =>handleInput(e)} placeholder="Page Name (required)" />

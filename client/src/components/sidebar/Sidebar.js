@@ -49,10 +49,12 @@ const Sidebar = ({ sidebar, handleToggleSidebar }) => {
                 </li>
             </Link>
             <hr/>
-            <li>
-                <MdExitToApp size={23}/>
-                <span>Log Out</span> 
-            </li>
+            <Link to='/logout'>
+                <li>
+                    <MdExitToApp size={23}/>
+                    <span>Log Out</span> 
+                </li>
+            </Link>
             <hr/>
         </nav>
     )

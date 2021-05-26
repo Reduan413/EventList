@@ -27,7 +27,7 @@ const Event = () => {
                 </div>
                 <hr/>
                 <div className="event__button">
-                   <Link to = ''><button className="btn btn-info btn-block">View Details</button></Link>
+                   <Link to = '/eventDetails'><button className="btn btn-info btn-block">View Details</button></Link>
                 </div>
             </div>
         </Card>

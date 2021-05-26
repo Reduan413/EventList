@@ -14,6 +14,9 @@ import LikePage from './screens/homeScreen/LikeEvent'
 import PagesScreen from './screens/pagesScreen/PagesScreen'
 import OwnPage from './components/createPage/OwnPage'
 import InterstedEvent from './components/intersted/InterstedEvent'
+import EventDetails from './screens/homeScreen/EventDetails'
+import Logout from "./components/Logout"
+
 
 
 const Layout = ({children}) => {
@@ -36,6 +39,7 @@ const App = () => {
    return (
     <Provider store={store}>
       <Switch>
+      <Route exact path="/logout" component={Logout} />
         <Route path="/" exact>
           <Layout>
             <HomeScreen/>
@@ -46,8 +50,16 @@ const App = () => {
             <Profile/>
           </Layout>
         </Route>
+        <Route path="/eventDetails" exact>
+          <Layout>
+            <EventDetails/>
+          </Layout>
+        </Route>
         <Route path="/auth" exact>
             <LoginScreen/>
+        </Route>
+        <Route path="/logout" exact>
+            <Logout/>
         </Route>
         <Route path="/page" exact component={PageIndex}>
           <Layout>

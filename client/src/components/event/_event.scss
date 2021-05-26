@@ -57,7 +57,14 @@
     &__button{
         margin-top: -10px;
         margin-bottom: -15px;
-        backgroundcolor:red;
+        text-decoration: none;
+        a{
+            text-decoration: none;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        
     }
 
 }

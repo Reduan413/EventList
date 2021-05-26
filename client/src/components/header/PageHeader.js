@@ -2,7 +2,8 @@ import React from 'react'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './_header.scss'
 
-const PageHeader = () => {
+const PageHeader = (props) => {  
+    console.log(props.data,"----------------------------")
     return (
         <>
             <div className="page">
@@ -14,7 +15,7 @@ const PageHeader = () => {
                         <img src="https://yt3.ggpht.com/ytc/AAUvwnjjl7sUdeyZ4pGOobMQnFM-U91gh1rZ40hvg1NONQ=s48-c-k-c0x00ffffff-no-rj" alt="" />
                     </div>
                     <div className="page__name">
-                        <h1>True Coder</h1>
+                        <h1>{props.data.name}</h1>
                         <p>500 followers</p>
                     </div>
                     <div className="page__follow">

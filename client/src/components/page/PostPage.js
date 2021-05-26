@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
+import { connect } from "react-redux"
 
 const PostPage = (props) => {
 
@@ -10,6 +11,7 @@ const PostPage = (props) => {
       'date':'',
       'time':''
     },
+    eventPhoto:'',
     eventLocation: '',
     eventDetails:''
   })
@@ -18,18 +20,19 @@ const PostPage = (props) => {
     const newdata = {...eventData}
     newdata[e.target.id] = e.target.value
     setEventData(newdata)
-    console.log(newdata)
-    
+    console.log(props)
   }
+
   function createEventSubmit(e){
     e.preventDefault()
     axios.post(`http://localhost:3001/event/`,
     {
-        title: eventData.eventName,
+        title: eventData.eventTitle,
         description: eventData.eventDetails,
         location: eventData.eventLocation,
-        dateTime: eventData.eventDateTime
-
+        dateTime: eventData.eventDateTime,
+        Photo: eventData.eventPhoto,
+        page: props.key
     },
     { 
         headers: {
@@ -38,7 +41,10 @@ const PostPage = (props) => {
     })
     .then((res) => {
         console.log(res.data)        
-  })
+    })
+    .catch((err) => {
+      console.dir(err)
+    })
   }
     return (
         <div className="col-xl-12 order-xl-1">
@@ -51,15 +57,21 @@ const PostPage = (props) => {
               </div>
             </div>
             <div className="card-body">
-              <form onSubmit={(e)=>createEventSubmit(e)}>
+              <form onSubmit={createEventSubmit}>
                 <h6 className="heading-small text-muted mb-4">Event information</h6>
                 <div className="pl-lg-4">
                   <div className="row">
-                    <div className="col-md-12">
+                    <div className="col-md-9">
                       <div className="form-group focused">
                         <label className="form-control-label" htmlFor="input-address">Event Name</label>
                         <input type="text" className="form-control form-control-alternative" id="eventTitle" 
                         value={eventData.eventTitle} onChange={(e) =>handleInput(e)} name="event_name"  placeholder="Event Name" />
+                      </div>
+                    </div>
+                    <div className="col-md-3">
+                      <div className="form-group focused">
+                        <label className="form-control-label" htmlFor="input-event_photo">Event Photo</label>
+                        <input type="file" className="" id="eventPhoto" value={eventData.eventPhoto} onChange={(e) =>handleInput(e)} name="event_photo"  placeholder="Event Date" />
                       </div>
                     </div>
                   </div>
@@ -90,7 +102,7 @@ const PostPage = (props) => {
                 <div className="pl-lg-4">
                   <div className="form-group focused">
                     <label>Description</label>
-                    <textarea rows="4" class="form-control form-control-alternative" id="eventDetails" placeholder="Description"value={eventData.eventDetails} onChange={(e) =>handleInput(e)} placeholder="Event Description...."></textarea>
+                    <textarea rows="4" class="form-control form-control-alternative" id="eventDetails" placeholder="Description" value={eventData.eventDetails} onChange={(e) =>handleInput(e)} placeholder="Event Description...."></textarea>
                   </div>
                 </div>
                 <div className="col-4 text-right">
@@ -103,5 +115,11 @@ const PostPage = (props) => {
     )
 }
 
-export default PostPage
+const mapStateToProps = (state) => {
+  return {
+      token: state.authReducer.token
+  }
+}
+
+export default connect(mapStateToProps)(PostPage)
 

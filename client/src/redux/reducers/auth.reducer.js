@@ -46,7 +46,6 @@ export default function authReducer(state = initialState, action) {
             }
         case LOGIN_FAILED:
             return {
-                ...state,
                 isAuthenticated: false,
                 token: null,
                 isLoading: false,
@@ -55,13 +54,15 @@ export default function authReducer(state = initialState, action) {
         case LOGOUT:
             localStorage.removeItem("token")
             return {
-                ...state,
                 isAuthenticated: false,
                 token: null,
                 isLoading: false,
                 user: null
             }
         default:
-            return state
+            return state.token ? {
+                ...state,
+                isAuthenticated: true
+            } : state
     }
 }

@@ -12,10 +12,14 @@ const OwnPage = (props) => {
 
     useEffect(() => {
         const fetchData = async() =>{
-            await axios.get(`http://localhost:3001/page/`)
+            await axios.get(`http://localhost:3001/page/mypage`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${props.token}`
+                }
+            })
             .then((res) => {
                 setPageData(res.data.result)
-
             })
         }
         fetchData()
@@ -31,7 +35,6 @@ const OwnPage = (props) => {
         .then((res) =>{
             const det = pageData.filter(pd => pd.id !== id)
             setPageData(det)
-            console.log(res.data, det )
         })
     }
     return (
@@ -50,7 +53,14 @@ const OwnPage = (props) => {
                         <p></p>
                     </div>
                     <div className="own__follow">
-                        <Link to="/page"><button className="page__btn btn btn-primary" key={page._id}><AiOutlineEye size={25}/></button></Link>
+                        <Link to={
+                            {
+                            pathname: '/page',
+                            state: {
+                                pageId: page._id
+                            }
+                            }
+                        }><button className="page__btn btn btn-primary" key={page._id}><AiOutlineEye size={25}/></button></Link>
                         <button className="page__btn btn btn-primary" key={page._id} onClick={() => deletePage(page._id)}><AiOutlineDelete size={25}/></button>
                     </div>
                 </div>

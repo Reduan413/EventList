@@ -9,12 +9,62 @@ import { BiMap } from 'react-icons/bi'
 import { AiFillEye } from 'react-icons/ai'
 import { Card } from 'react-bootstrap'
 import './_page.scss'
+import axios from 'axios'
 
-const PageHome = () => {
+const PageHome = (props) => {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const[eventData, setEventData] = useState({
+        eventName: '',
+        eventDataTime: {
+          'date':'',
+          'time':''
+        },
+        eventLocation: '',
+        eventDetails:''
+    })
+    const handleInput = (e)=>{
+        const newdata = {...eventData}
+        newdata[e.target.id] = e.target.value
+        setEventData(newdata)
+        console.log(newdata)
+        
+      }
+    function editPostSubmit(e){
+        e.preventDefault()
+        axios.put(``,
+        {
+            title: eventData.eventName,
+            description: eventData.eventDetails,
+            location: eventData.eventLocation,
+            dateTime: eventData.eventDataTime
+
+        },
+        {    
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        .then((res) => {
+            console.log(res.data)        
+    })
+    }
+
+    const deleteEvent = (id) => {
+        axios.delete(`http://localhost:3001/event/${id}`,
+        { 
+            headers: {
+                Authorization: `Bearer ${props.token}`
+            }
+        })
+        .then((res) =>{
+            const det = eventData.filter(pd => pd.id !== id)
+            setEventData(det)
+            console.log(res.data, det )
+        })
+    }
     return (
         <Card className="pagecard">
             <div className="pageevent">
@@ -57,19 +107,19 @@ const PageHome = () => {
                                     <div className="card-header bg-white border-0">
                                         <div className="row align-items-center">
                                             <div className="col-8">
-                                                <h3 className="mb-0">Create New Event</h3>
+                                                <h3 className="mb-0">Edit New Event</h3>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="card-body">
-                                        <form>
+                                        <form onSubmit={(e)=>editPostSubmit(e)}>
                                             <h6 className="heading-small text-muted mb-4">Event information</h6>
                                             <div className="pl-lg-4">
                                                 <div className="row">
                                                     <div className="col-md-12">
                                                         <div className="form-group focused">
                                                             <label className="form-control-label" htmlFor="input-address">Event Name</label>
-                                                            <input type="text" className="form-control form-control-alternative" id="input-event_name" name="event_name"  placeholder="Event Name" />
+                                                            <input type="text" className="form-control form-control-alternative" id="eventName" onChange={(e) =>handleInput(e)} name="event_name"  placeholder="Event Name" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -77,19 +127,19 @@ const PageHome = () => {
                                                     <div className="col-lg-4">
                                                         <div className="form-group focused">
                                                             <label className="form-control-label" htmlFor="input-event_date">Start Date</label>
-                                                            <input type="date" className="form-control form-control-alternative" id="input-event_date" name="event_date"  placeholder="Event Date" />
+                                                            <input type="date" className="form-control form-control-alternative" id="eventDataTime" onChange={(e) =>handleInput(e)} name="event_date"  placeholder="Event Date" />
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-4">
                                                         <div className="form-group focused">
                                                             <label className="form-control-label" htmlFor="nput-event_time">Start Time</label>
-                                                            <input type="time" className="form-control form-control-alternative" id="input-event_time" name="event_time"  placeholder="Event Time" />
+                                                            <input type="time" className="form-control form-control-alternative" id="eventDataTime" onChange={(e) =>handleInput(e)} name="event_time"  placeholder="Event Time" />
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-4">
                                                         <div className="form-group">
                                                             <label className="form-control-label" htmlFor="input-location">Location</label>
-                                                            <input type="text" id="input-location" className="form-control form-control-alternative" placeholder="Location"/>
+                                                            <input type="text" onChange={(e) =>handleInput(e)} id="eventLocation" className="form-control form-control-alternative" placeholder="Location"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -100,7 +150,7 @@ const PageHome = () => {
                                             <div className="pl-lg-4">
                                                 <div className="form-group focused">
                                                     <label>Description</label>
-                                                    <textarea rows="4" class="form-control form-control-alternative" placeholder="Event Description...."></textarea>
+                                                    <textarea rows="4"  id="eventDetails" onChange={(e) =>handleInput(e)} class="form-control form-control-alternative" placeholder="Event Description...."></textarea>
                                                 </div>
                                             </div>
                                             <div className="col-4 text-right">
@@ -113,7 +163,7 @@ const PageHome = () => {
                         </Modal>
                     </div>
                     <div className="col-6 ">
-                        <button  className="btn btn-sm  deleteButton" type="submit"><AiOutlineClose size={25}/></button>
+                        <button  className="btn btn-sm  deleteButton"  onClick={() => deleteEvent(1)} type="submit"><AiOutlineClose size={25}/></button>
                     </div>
                 </div>
             </div>
