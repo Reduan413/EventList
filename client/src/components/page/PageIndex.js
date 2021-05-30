@@ -10,6 +10,7 @@ import PageProfile from '../setting/PageProfile'
 import PostPage from '../page/PostPage'
 import axios from 'axios';
 import { useLocation } from "react-router-dom"
+import MyEvent from '../../components/page/MyEvent'
 
 
 const PageIndex = (props) => {
@@ -30,7 +31,7 @@ const PageIndex = (props) => {
         })
       }
       callPageData()
-    }, [pageData])
+    }, [])
     const changeNavPosition =() => {
         if (window.scrollY >= 300){
             setNavbar(true);
@@ -53,13 +54,13 @@ const PageIndex = (props) => {
           </TabList>
 
           <TabPanel>
-            <PageHome data={pageData[0]} />
+            <MyEvent data={pageData[0]} />
           </TabPanel>
           <TabPanel>
-            <PostPage/>
+            <PostPage data={pageData[0]}/>
           </TabPanel>
           <TabPanel>
-            <PageProfile/>
+            <PageProfile data={pageData[0]}/>
           </TabPanel>
         </Tabs>
       </>

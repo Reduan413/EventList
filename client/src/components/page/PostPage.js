@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
 import { connect } from "react-redux"
+import RichTextEditor from "react-rte";
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
 const PostPage = (props) => {
-
-  const[eventData, setEventData] = useState({
+  const [description, setDescription] = useState(RichTextEditor.createEmptyValue());
+  const [eventData, setEventData] = useState({
     eventTitle: '',
-    eventDataTime: {
-      'date':'',
-      'time':''
-    },
+    eventDate: '',
+    eventTime: '',
     eventPhoto:'',
     eventLocation: '',
     eventDetails:''
@@ -20,20 +19,26 @@ const PostPage = (props) => {
     const newdata = {...eventData}
     newdata[e.target.id] = e.target.value
     setEventData(newdata)
-    console.log(props)
+    console.log("Input Data ---- \n",newdata)
   }
+
+  const onFileChange =(e) => {
+    const newdata = {...eventData}
+    newdata["eventPhoto"] = e.target.files[0]
+    setEventData(newdata)
+  }
+    console.log(eventData)
 
   function createEventSubmit(e){
     e.preventDefault()
-    axios.post(`http://localhost:3001/event/`,
-    {
-        title: eventData.eventTitle,
-        description: eventData.eventDetails,
-        location: eventData.eventLocation,
-        dateTime: eventData.eventDateTime,
-        Photo: eventData.eventPhoto,
-        page: props.key
-    },
+    const formData= new FormData()
+    formData.append('title', eventData.eventTitle)
+    formData.append('description', description.toString('html'))
+    formData.append('image', eventData.eventPhoto)
+    formData.append('location', eventData.eventLocation)
+    formData.append('dateTime', eventData.eventDate +' ' +eventData.eventTime)
+    formData.append('pageId', props.data._id)
+    axios.post(`http://localhost:3001/event/`,formData,
     { 
         headers: {
             Authorization: `Bearer ${props.token}`
@@ -47,7 +52,9 @@ const PostPage = (props) => {
     })
   }
     return (
+     
         <div className="col-xl-12 order-xl-1">
+          { console.log(props.data._id)}
           <div className="card shadow">
             <div className="card-header bg-white border-0">
               <div className="row align-items-center">
@@ -57,7 +64,7 @@ const PostPage = (props) => {
               </div>
             </div>
             <div className="card-body">
-              <form onSubmit={createEventSubmit}>
+              <form onSubmit={createEventSubmit} encType="multipart/form-data" >
                 <h6 className="heading-small text-muted mb-4">Event information</h6>
                 <div className="pl-lg-4">
                   <div className="row">
@@ -71,7 +78,7 @@ const PostPage = (props) => {
                     <div className="col-md-3">
                       <div className="form-group focused">
                         <label className="form-control-label" htmlFor="input-event_photo">Event Photo</label>
-                        <input type="file" className="" id="eventPhoto" value={eventData.eventPhoto} onChange={(e) =>handleInput(e)} name="event_photo"  placeholder="Event Date" />
+                        <input type="file" onChange={(e) =>onFileChange(e)}  />
                       </div>
                     </div>
                   </div>
@@ -79,13 +86,13 @@ const PostPage = (props) => {
                     <div className="col-lg-4">
                       <div className="form-group focused">
                         <label className="form-control-label" htmlFor="input-event_date">Start Date</label>
-                        <input type="date" className="form-control form-control-alternative" id="eventDataTime" value={eventData.eventDataTime} onChange={(e) =>handleInput(e)}name="event_date"  placeholder="Event Date" />
+                        <input type="date" className="form-control form-control-alternative" id="eventDate" value={eventData.eventDate} onChange={(e) =>handleInput(e)}name="event_date"  placeholder="Event Date" />
                       </div>
                     </div>
                     <div className="col-lg-4">
                       <div className="form-group focused">
                         <label className="form-control-label" htmlFor="nput-event_time">Start Time</label>
-                        <input type="time" className="form-control form-control-alternative" id="eventDataTime" value={eventData.eventDataTime} onChange={(e) =>handleInput(e)}name="event_time"  placeholder="Event Time" />
+                        <input type="time" className="form-control form-control-alternative" id="eventTime" value={eventData.eventTime} onChange={(e) =>handleInput(e)}name="event_time"  placeholder="Event Time" />
                       </div>
                     </div>
                     <div className="col-lg-4">
@@ -100,10 +107,8 @@ const PostPage = (props) => {
                
                 <h6 className="heading-small text-muted mb-4">About Event</h6>
                 <div className="pl-lg-4">
-                  <div className="form-group focused">
-                    <label>Description</label>
-                    <textarea rows="4" class="form-control form-control-alternative" id="eventDetails" placeholder="Description" value={eventData.eventDetails} onChange={(e) =>handleInput(e)} placeholder="Event Description...."></textarea>
-                  </div>
+                <RichTextEditor value={description} toolbarConfig={toolbarConfig} onChange={setDescription} />
+                  
                 </div>
                 <div className="col-4 text-right">
                     <button  className="btn btn-primary" type="submit">Create</button>
@@ -123,3 +128,27 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps)(PostPage)
 
+
+const toolbarConfig = {
+  display: [
+    "INLINE_STYLE_BUTTONS",
+    "BLOCK_TYPE_BUTTONS",
+    "BLOCK_TYPE_DROPDOWN",
+    "HISTORY_BUTTONS"
+  ],
+  INLINE_STYLE_BUTTONS: [
+    { label: "Bold", style: "BOLD", className: "custom-css-class" },
+    { label: "Italic", style: "ITALIC" },
+    { label: "Underline", style: "UNDERLINE" }
+  ],
+  BLOCK_TYPE_DROPDOWN: [
+    { label: "Normal", style: "unstyled" },
+    { label: "Heading Large", style: "header-one" },
+    { label: "Heading Medium", style: "header-two" },
+    { label: "Heading Small", style: "header-three" }
+  ],
+  BLOCK_TYPE_BUTTONS: [
+    { label: "UL", style: "unordered-list-item" },
+    { label: "OL", style: "ordered-list-item" }
+  ]
+};

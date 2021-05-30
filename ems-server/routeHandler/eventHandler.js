@@ -1,3 +1,4 @@
+const ObjectId = require("mongodb").ObjectID;
 const Event = require("../models/eventModel");
 
 module.exports = {
@@ -41,7 +42,8 @@ module.exports = {
 
   getEventCreatedByPage: async (req, res) => {
     try {
-      const data = await Event.find({ page: req.params.id }).populate("admin");
+      console.log(req.body.pid)
+      const data = await Event.find({ page: req.body.pid }).populate("admin");
       res.status(200).json({
         result: data,
         message: "Success",
@@ -55,10 +57,11 @@ module.exports = {
   },
 
   createEvent: async (req, res) => {
+    console.log(req.body);
     const newEvent = new Event({
       title: req.body.title,
       description: req.body.description,
-      date: req.body.date ? req.body.date : null,
+      dateTime: req.body.dateTime ? req.body.dateTime : null,
       img: req.file ? req.file.filename : null,
       location: req.body.location,
       page: req.body.pageId,
@@ -82,40 +85,64 @@ module.exports = {
   },
 
   updateEvent: async (req, res) => {
-    const event = Event.find({ _id: req.params.id });
-    const eventData = event[0];
-    const result = Event.findByIdAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: {
-          title: req.body.title ? req.body.title : eventData.title,
-          description: req.body.description
-            ? req.body.description
-            : eventData.description,
-          date: req.body.date ? req.body.date : eventData.date,
-          img: req.file ? req.file.filename : eventData.img,
-          location: req.body.location ? req.body.location : eventData.location,
-          status: req.body.status ? req.body.status : eventData.status,
-        },
-      },
-      {
-        new: true,
-        useFindAndModify: false,
-      },
-      (err) => {
-        if (err) {
-          res.status(500).json({
-            error: "There was a server side error!",
-          });
-        } else {
-          res.status(200).json({
-            message: "Event was updated successfully!",
-            res: result,
-          });
-        }
-      }
-    );
+    const id = req.params.id;
+    let updatedEvent = {
+      ...req.body,
+      img: req.file ? req.file.filename : null,
+    }
+
+    console.log('file is', req.file)
+    
+    try {
+       let event = await Event.findOneAndUpdate(
+				{ _id: id },
+				updatedEvent,
+				{ upsert: true, new: true }
+			);
+			res.send(event);
+    } catch(err) {
+      console.log(err)
+      res.status(500).send(err)
+    }
   },
+
+  // updateEvent: async (req, res) => {
+  //   const id = req.params.id;
+  //   const event = Event.find({ _id: id });
+  //   const eventData = event[0];
+
+  //   const result = Event.findByIdAndUpdate(
+  //     { _id: id },
+  //     {
+  //       $set: {
+  //         title: req.body.title ? req.body.title : eventData.title,
+  //         description: req.body.description
+  //           ? req.body.description
+  //           : eventData.description,
+  //         date: req.body.date ? req.body.date : eventData.date,
+  //         img: req.file ? req.file.filename : eventData.img,
+  //         location: req.body.location ? req.body.location : eventData.location,
+  //         status: req.body.status ? req.body.status : eventData.status,
+  //       },
+  //     },
+  //     {
+  //       new: true,
+  //       useFindAndModify: false,
+  //     },
+  //     (err) => {
+  //       if (err) {
+  //         res.status(500).json({
+  //           error: "There was a server side error!",
+  //         });
+  //       } else {
+  //         res.status(200).json({
+  //           message: "Event was updated successfully!",
+  //           res: result,
+  //         });
+  //       }
+  //     }
+  //   );
+  // },
 
   deleteEvent: (req, res) => {
     Event.deleteOne({ _id: req.params.id }, (err) => {

@@ -23,7 +23,7 @@ const OwnPage = (props) => {
             })
         }
         fetchData()
-    })
+    }, [])
 
     const deletePage = (id) => {
         axios.delete(`http://localhost:3001/page/${id}`,
@@ -40,8 +40,8 @@ const OwnPage = (props) => {
     return (
         <>
         <CreatePage/>
-        {pageData.map((page) => (
-        <Card className="own_card">
+        {pageData.map((page, idx) => (
+        <Card className="own_card" key={idx}>
             <div className="own">
                 <div className="own__container">
                     <div className="own__img">

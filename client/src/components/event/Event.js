@@ -1,19 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import './_event.scss'
 import { AiFillEye } from 'react-icons/ai'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
+import axios from 'axios'
 
-const Event = () => {
+const Event = ({data}) => {
+    const [eventData, setEventData] = useState([])
 
     return (
+        <>
         <Card>
             <div className="event">
                 <div className="event__top">
-                    <img src="https://i.ytimg.com/vi/AwRb8LX-szg/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBmgMg9_elE9IV7_ZGK19klZaGMQQ" alt="" />
+                    <img src={`http://localhost:3001/images/${data.img}`} style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="" />
                 </div>
                 <div className="event__title">
-                    Responsive Animated Product Card Using HTML & CSS & JavaScript
+                    {data.title}
                 </div>
                 <div className="event__details">
                     <span>
@@ -27,10 +30,18 @@ const Event = () => {
                 </div>
                 <hr/>
                 <div className="event__button">
-                   <Link to = '/eventDetails'><button className="btn btn-info btn-block">View Details</button></Link>
+                <Link to={
+                            {
+                            pathname: '/eventDetails',
+                            state: {
+                                eventId: data._id
+                            }
+                            }
+                        }><button key={data._id} className="btn btn-info btn-block">View Details</button></Link>
                 </div>
             </div>
         </Card>
+        </>
     )
 }
 

@@ -8,6 +8,7 @@ const { auth, page, event } = require("./routes/index")
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use(express.static('static'))
 
 // database connection wit mongoose
 mongoose
@@ -32,6 +33,6 @@ app.use("/event", event)
 //     res.status(500).json({error: err})
 // }
 
-app.listen(3002, ()=>{
+app.listen(3001, ()=>{
     console.log(`app listening at port 3001`)
 })

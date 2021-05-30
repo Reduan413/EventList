@@ -18,7 +18,7 @@ const All = (props) => {
             })
         }
         fetchData()
-    })
+    }, [])
     // console.log(authReducer.isAuthenticated)
     function likepage(id){
         console.log(id)

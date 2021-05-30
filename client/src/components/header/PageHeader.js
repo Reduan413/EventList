@@ -3,7 +3,6 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './_header.scss'
 
 const PageHeader = (props) => {  
-    console.log(props.data,"----------------------------")
     return (
         <>
             <div className="page">

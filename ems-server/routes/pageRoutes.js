@@ -24,7 +24,7 @@ router.get("/mypage", checkLogin, getPagesCreatedByUser);
 router.get("/follows", checkLogin, getPagesLikedByUser);
 
 // GET All Events Created by Page
-router.get("/events", checkLogin, getEventCreatedByPage);
+router.post("/events", checkLogin, getEventCreatedByPage);
 
 // GET Page by ID
 router.get("/:id", getPageById);

@@ -1,92 +1,190 @@
-import React, { useEffect } from 'react'
-import './_screen.scss'
-import { AiFillEye } from 'react-icons/ai'
-import { RiFlag2Fill } from 'react-icons/ri'
-import { BsFillPeopleFill,BsFillClockFill } from "react-icons/bs";
-import { ImLocation } from 'react-icons/im'
-import { Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Card, Col, Row } from "react-bootstrap";
+import { BsFillClockFill, BsFillPeopleFill } from "react-icons/bs";
+import { ImLocation } from "react-icons/im";
+import { RiFlag2Fill } from "react-icons/ri";
+import { connect } from "react-redux";
+import { useLocation } from "react-router-dom";
+import getImageRoute from "../../utils/getImageRoute";
+import "./_screen.scss";
 
-const EventDetails = () => {
+const EventDetails = (props) => {
+  const [eventData, setEventData] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const location = useLocation();
 
-    return (
-        <Card className="eventview_card">
-            <div className="eventview">
-                <div className="eventview__top">
-                    <img src="https://i.ytimg.com/vi/AwRb8LX-szg/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBmgMg9_elE9IV7_ZGK19klZaGMQQ" alt="" />
-                </div>
-                <div className="eventview__title">
-                    Responsive Animated Product Card Using HTML & CSS & JavaScript
-                </div>
-                <div className="eventview__details">
-                    <span>
-                        <BsFillPeopleFill size={20}/>
-                    </span>
-                </div>
-                <div className="eventview__details">
-                    <span>
-                        <RiFlag2Fill size={20}/> Event by
-                    </span>
-                </div>
-                <div className="eventview__details">
-                    <span>
-                        <BsFillClockFill size={20}/> 
-                    </span>
-                </div>
-                <div className="eventview__details">
-                    <span>
-                        <ImLocation size={20}/>
-                    </span>
-                </div>
-                <div className="eventview__details">
-                    
-                    <p>Research is defined as careful consideration of a study regarding a particular concern or problem using scientific methods. Research results can be presented in various ways, but one of the most popular—and effective—presentation forms is the research paper. It needs enough dedication and eagerness of learning new things in the field of research. A researcher can secure a bright career in the future.
+  useEffect(() => {
+    const calleventData = async () => {
+      await axios
+        .get(`http://localhost:3001/event/${location.state.eventId}`)
+        .then((res) => {
+          setEventData(res.data.result);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    calleventData();
+  }, []);
 
+  function createMarkup() {
+    return { __html: eventData[0]?.description };
+  }
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const month = d.getMonth();
+    const day = d.getDate();
+    const year = d.getFullYear();
+    const newD = new Date(year, month, day);
+    const monthName = newD.toLocaleString("default", { month: "long" });
+    return day + " " + monthName + ", " + year;
+  };
 
-                        DIU CPC is arranging a series of workshops to let you start your journey with research and guide you until the publication of your research paper.
-                        To avail of this opportunity, you have to register to join the first workshop -
-                        “Workshop on Research Domain and Publication Road Map”  
+  const formatTime = ([date, time]) => {
+    const mainTime = time.split(".")[0];
 
-                        🟣 Expected outcomes of this workshop are:
-                        Knowledge about different research domains.
-                        Topic Selection and Helping you to find your domain
-                        You’ll understand the total roadmap of research publication.
-                        Only those who will join in this workshop will get the opportunity to participate in the following workshops. So, grab it and do not miss the opportunity.
-                        🟠 Next workshops:
-                        1. Workshop on Literature Review and Data Collection Method
-                        2. Workshop on Data Preprocessing and Data Visualization
-                        3. Workshop on Feature Engineering
-                        4. Workshop on Algorithm Implementation
-                        5. Conference/journal selection and paper submission
-                        Once you get registered, if you show us your dedication and execute the learnings from the workshops properly, we can assure you that you will be able to publish your own research paper after completing all the workshops.
-                        ⚠ Requirements: Basic knowledge of Python programming language.
-                        ( This event is only for Dept. of CSE students )
-                        ✒Registration form: https://forms.gle/EhN22GaaQ2ka1w3w7
-                        Registration Fee: 500 BDT (Refundable*)
-                        Payment Method and other information are given in the registration form.
-                        📢Workshop Date: 06 May. 2021
-                        Time: We will notify the registered participants
-                        Last date to register: 05 May 2021
-                        For any query:
-                        Md. Sakibul Hasan
-                        Vice President
-                        Research and Journal Wing
-                        Email: cpc@diu.edu.bd</p>
-                </div>
-                <hr/>
-                <div className="eventview__button">
-                    <div className="row">
-                        <div className="col">
-                            <button className="btn  btn-block">Like</button>
-                        </div>
-                        <div className="col">
-                            <button className="btn btn-info btn-block">Comment</button>
-                        </div>
-                    </div>
-                </div>
+    let gotTime = new Date(`${date} ${mainTime}`)
+      .toLocaleTimeString()
+      .replace(/([\d]+:[\d]{2})(:[\d]{2})(.*)/, "$1$3");
+
+    let hour = gotTime.split(":")[0];
+
+    if (hour < 10) {
+      gotTime = 0 + gotTime;
+    }
+
+    return gotTime;
+  };
+
+  function interestedEvent(id) {
+    console.log(id);
+
+    axios
+      .put(
+        `http://localhost:3001/event/interest/${id}`,
+
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+          },
+        }
+      )
+      .then((res) => {});
+  }
+  function goingEvent(id) {
+    console.log(id);
+
+    axios
+      .put(
+        `http://localhost:3001/event/going/${id}`,
+
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+          },
+        }
+      )
+      .then((res) => {});
+  }
+  console.log(eventData);
+  // console.log(eventData[0].page.name);
+  return (
+    <Card className="eventview_card">
+      <div className="eventview">
+        <div className="eventview__top">
+          <img
+            src={getImageRoute(eventData[0]?.img)}
+            style={{ width: "100%", height: "430px", objectFit: "cover" }}
+            alt=""
+          />
+        </div>
+        <div className="eventview__title">
+          <h3>{eventData[0]?.title}</h3>
+        </div>
+        <Row>
+          <Col lg={8} md={6}>
+            <div className="eventview__details">
+              <span>
+                <BsFillPeopleFill size={20} />
+                {eventData[0]?.interested.length} interested •{" "}
+                {eventData[0]?.going.length} going
+              </span>
             </div>
-        </Card>
-    )
-}
+          </Col>
+          <Col lg={4} md={6}>
+            <div className="eventview__going">
+              <div className="row">
+                <div className="col">
+                  <button
+                    key={eventData[0]?._id}
+                    onClick={() => goingEvent(eventData[0]?._id)}
+                    className="btn  btn-block"
+                  >
+                    Going
+                  </button>
+                </div>
+                <div className="col">
+                  <button
+                    key={eventData[0]?._id}
+                    onClick={() => interestedEvent(eventData[0]?._id)}
+                    className="btn btn-info btn-block"
+                  >
+                    interested
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
 
-export default EventDetails
+        <div className="eventview__details">
+          <span>
+            <RiFlag2Fill size={20} /> Event by {eventData[0]?.page.name}
+          </span>
+        </div>
+        <div className="eventview__details">
+          <span>
+            <BsFillClockFill size={20} /> {"  "}
+            {eventData[0]?.dateTime
+              ? formatDate(eventData[0].dateTime.split("T")[0])
+              : "Null"}{" "}
+            At{" "}
+            {eventData[0]?.dateTime
+              ? formatTime(eventData[0].dateTime.split("T"))
+              : "Null"}{" "}
+          </span>
+        </div>
+        <div className="eventview__details">
+          <span>
+            <ImLocation size={20} />
+            {eventData[0]?.location}
+          </span>
+        </div>
+        <div className="eventview__details">
+          <div dangerouslySetInnerHTML={createMarkup()}></div>
+        </div>
+        {/* <hr />
+        <div className="eventview__button">
+          <div className="row">
+            <div className="col">
+              <button className="btn  btn-block">Like</button>
+            </div>
+            <div className="col">
+              <button className="btn btn-info btn-block">Comment</button>
+            </div>
+          </div>
+        </div> */}
+      </div>
+    </Card>
+  );
+};
+const mapStateToProps = (state) => {
+  return {
+    token: state.authReducer.token,
+  };
+};
+export default connect(mapStateToProps)(EventDetails);
