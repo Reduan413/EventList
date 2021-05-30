@@ -154,7 +154,7 @@ const PageProfile = (props) => {
                         <hr className="my-4"/> */}
 
                     <h6 className="heading-small text-muted mb-4">
-                      About Event
+                      About Page
                     </h6>
                     <div className="pl-lg-4">
                       <RichTextEditor
