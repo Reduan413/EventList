@@ -220,7 +220,7 @@ const PageProfile = (props) => {
             <div className="pl-lg-4">
               <div className="form-group focused">
                 <label>About Page : </label>
-                <p style={{ marginLeft: "30px" }}>Hello Style!</p>
+                <p style={{ marginLeft: "30px" }}>{pageData[0]?.discription}</p>
               </div>
             </div>
           </form>
