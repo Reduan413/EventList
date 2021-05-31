@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 import RichTextEditor from "react-rte";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 const PostPage = (props) => {
+  const history = useHistory();
   const [description, setDescription] = useState(
     RichTextEditor.createEmptyValue()
   );
@@ -51,6 +53,7 @@ const PostPage = (props) => {
       })
       .then((res) => {
         console.log(res.data);
+        history.push("/page");
       })
       .catch((err) => {
         console.dir(err);
@@ -173,7 +176,13 @@ const PostPage = (props) => {
               />
             </div>
             <div className="col-4 text-right">
-              <button className="btn btn-primary" type="submit">
+              <button
+                onClick={() => {
+                  history.push("/page");
+                }}
+                className="btn btn-primary"
+                type="submit"
+              >
                 Create
               </button>
             </div>

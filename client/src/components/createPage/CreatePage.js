@@ -32,6 +32,7 @@ const CreatePage = (props) => {
       )
       .then((res) => {
         setShow(false);
+        // props.fetchData;
         console.log(res.data);
       });
   }

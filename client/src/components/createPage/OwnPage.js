@@ -41,7 +41,7 @@ const OwnPage = (props) => {
   console.log(pageData);
   return (
     <>
-      <CreatePage />
+      <CreatePage fetchData={() => fetchData()} />
       {pageData.map((page, idx) => (
         <Card className="own_card" key={idx}>
           <div className="own">

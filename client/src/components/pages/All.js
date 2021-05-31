@@ -34,7 +34,11 @@ const All = (props) => {
         }
       )
       .then((res) => {
+        console.log(res);
         fetchData();
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
   console.log(pageData);
@@ -63,7 +67,9 @@ const All = (props) => {
                 <button
                   key={page._id}
                   onClick={() => likepage(page._id)}
-                  className="page__btn btn btn-primary"
+                  className={
+                    page?.pageLiked ? "btn btn-info btn-block" : "btn btn-light"
+                  }
                 >
                   Follow
                 </button>

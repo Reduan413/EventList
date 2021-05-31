@@ -1,10 +1,51 @@
+import axios from "axios";
 import React from "react";
+import { connect } from "react-redux";
 import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import getImageRoute from "../../utils/getImageRoute";
 import "./_header.scss";
 
 const PageHeader = (props) => {
   console.log(props.data);
+
+  function likepage(id) {
+    console.log(id);
+
+    axios
+      .put(
+        `http://localhost:3001/page/like/${id}`,
+
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function unlikepage(id) {
+    console.log(id);
+
+    axios
+      .put(
+        `http://localhost:3001/page/unlike/${id}`,
+
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${props.token}`,
+          },
+        }
+      )
+      .then((res) => {});
+  }
   return (
     <>
       <div className="page">
@@ -30,12 +71,27 @@ const PageHeader = (props) => {
             <p>{props.data.likes.length} followers</p>
           </div>
           <div className="page__follow">
-            <button className="page__btn btn btn-primary">Follow</button>
+            <button
+              key={props.data?._id}
+              onClick={() => likepage(props.data?._id)}
+              className={
+                props.data?.pageLiked
+                  ? "btn btn-info btn-block"
+                  : "btn btn-light"
+              }
+            >
+              Follow
+            </button>
           </div>
         </div>
       </div>
     </>
   );
 };
+const mapStateToProps = (state) => {
+  return {
+    token: state.authReducer.token,
+  };
+};
 
-export default PageHeader;
+export default connect(mapStateToProps)(PageHeader);

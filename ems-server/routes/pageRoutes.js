@@ -27,7 +27,7 @@ router.get("/follows", checkLogin, getPagesLikedByUser);
 router.post("/events", checkLogin, getEventCreatedByPage);
 
 // GET Page by ID
-router.get("/:id", getPageById);
+router.get("/:id", checkLogin, getPageById);
 
 // POST A Page
 router.post("/", checkLogin, fileUpload, createPage);

@@ -13,21 +13,25 @@ const EventDetails = (props) => {
   const [eventData, setEventData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const location = useLocation();
-
   useEffect(() => {
-    const calleventData = async () => {
-      await axios
-        .get(`http://localhost:3001/event/${location.state.eventId}`)
-        .then((res) => {
-          setEventData(res.data.result);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    calleventData();
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    await axios
+      .get(`http://localhost:3001/event/${location.state.eventId}`, {
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+        },
+      })
+      .then((res) => {
+        setEventData(res.data.result);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   function createMarkup() {
     return { __html: eventData[0]?.description };
@@ -59,12 +63,11 @@ const EventDetails = (props) => {
   };
 
   function interestedEvent(id) {
-    console.log(id);
+    console.log(props.token, "=======================================");
 
     axios
       .put(
         `http://localhost:3001/event/interest/${id}`,
-
         {},
         {
           headers: {
@@ -72,7 +75,13 @@ const EventDetails = (props) => {
           },
         }
       )
-      .then((res) => {});
+      .then((res) => {
+        console.log(res);
+        fetchData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   function goingEvent(id) {
     console.log(id);
@@ -80,7 +89,6 @@ const EventDetails = (props) => {
     axios
       .put(
         `http://localhost:3001/event/going/${id}`,
-
         {},
         {
           headers: {
@@ -88,7 +96,9 @@ const EventDetails = (props) => {
           },
         }
       )
-      .then((res) => {});
+      .then((res) => {
+        fetchData();
+      });
   }
   console.log(eventData);
   // console.log(eventData[0].page.name);
@@ -122,7 +132,11 @@ const EventDetails = (props) => {
                   <button
                     key={eventData[0]?._id}
                     onClick={() => goingEvent(eventData[0]?._id)}
-                    className="btn  btn-block"
+                    className={
+                      eventData[1]?.userIsGoing
+                        ? "btn btn-info btn-block"
+                        : "btn btn-light"
+                    }
                   >
                     Going
                   </button>
@@ -131,7 +145,11 @@ const EventDetails = (props) => {
                   <button
                     key={eventData[0]?._id}
                     onClick={() => interestedEvent(eventData[0]?._id)}
-                    className="btn btn-info btn-block"
+                    className={
+                      eventData[1]?.userIsInterested
+                        ? "btn btn-info btn-block"
+                        : "btn btn-light"
+                    }
                   >
                     interested
                   </button>

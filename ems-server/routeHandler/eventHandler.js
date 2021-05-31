@@ -1,5 +1,6 @@
 const ObjectId = require("mongodb").ObjectID;
 const Event = require("../models/eventModel");
+const User = require("../models/userModel");
 
 module.exports = {
   getAllEvents: (req, res) => {
@@ -29,6 +30,16 @@ module.exports = {
       const data = await Event.find({ _id: req.params.id })
         .populate("page")
         .populate("author");
+
+      const eventData = data[0];
+      const eventInterested =
+        eventData.interested.indexOf(req.userId) > -1 ? true : false;
+      const eventGoing =
+        eventData.going.indexOf(req.userId) > -1 ? true : false;
+      data.push({
+        userIsInterested: eventInterested,
+        userIsGoing: eventGoing,
+      });
       res.status(200).json({
         result: data,
         message: "Success",
@@ -42,7 +53,7 @@ module.exports = {
 
   getEventCreatedByPage: async (req, res) => {
     try {
-      console.log(req.body.pid)
+      console.log(req.body.pid);
       const data = await Event.find({ page: req.body.pid }).populate("admin");
       res.status(200).json({
         result: data,
@@ -89,20 +100,19 @@ module.exports = {
     let updatedEvent = {
       ...req.body,
       img: req.file ? req.file.filename : null,
-    }
+    };
 
-    console.log('file is', req.file)
-    
+    console.log("file is", req.file);
+
     try {
-       let event = await Event.findOneAndUpdate(
-				{ _id: id },
-				updatedEvent,
-				{ upsert: true, new: true }
-			);
-			res.send(event);
-    } catch(err) {
-      console.log(err)
-      res.status(500).send(err)
+      let event = await Event.findOneAndUpdate({ _id: id }, updatedEvent, {
+        upsert: true,
+        new: true,
+      });
+      res.send(event);
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
     }
   },
 

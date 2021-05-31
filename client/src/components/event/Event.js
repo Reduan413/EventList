@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import { AiFillEye } from "react-icons/ai";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import getImageRoute from "../../utils/getImageRoute";
 import "./_event.scss";
 
 const Event = ({ data }) => {
   const [eventData, setEventData] = useState([]);
-  console.log(data);
-
+  console.log(data.token);
   return (
     <>
       <Card>
@@ -30,19 +30,19 @@ const Event = ({ data }) => {
           <div className="event__channel">
             <img
               src={
-                !data.page.img
+                !data.page?.img
                   ? "https://yt3.ggpht.com/ytc/AAUvwnjjl7sUdeyZ4pGOobMQnFM-U91gh1rZ40hvg1NONQ=s48-c-k-c0x00ffffff-no-rj"
-                  : getImageRoute(data.page.img)
+                  : getImageRoute(data.page?.img)
               }
               alt=""
             />
-            <p>{data.page.name}</p>
+            <p>{data.page?.name}</p>
           </div>
           <hr />
           <div className="event__button">
             <Link
               to={{
-                pathname: "/eventDetails",
+                pathname: data.token ? "/eventDetails" : "/auth",
                 state: {
                   eventId: data._id,
                 },
@@ -58,5 +58,10 @@ const Event = ({ data }) => {
     </>
   );
 };
+const mapStateToProps = (state, ownProps) => {
+  ownProps.data.token = state.authReducer.token || null;
 
-export default Event;
+  return ownProps;
+};
+export default connect(mapStateToProps)(Event);
+// export default Event;

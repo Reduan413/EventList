@@ -26,6 +26,11 @@ module.exports = {
   getPageById: async (req, res) => {
     try {
       const data = await Page.find({ _id: req.params.id }).populate("admin");
+      const pageData = data[0];
+      const pageLiked = pageData.likes.indexOf(req.userId) > -1 ? true : false;
+      data.push({
+        pageLiked: pageLiked,
+      });
       res.status(200).json({
         result: data,
         message: "Success",
@@ -43,7 +48,7 @@ module.exports = {
       description: req.body.description,
       img: req.file ? req.file.filename : null,
       admin: req.userId,
-      status: 'active'
+      status: "active",
     });
 
     try {

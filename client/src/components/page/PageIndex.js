@@ -9,6 +9,7 @@ import '../sidebar/_sidebar.scss'
 import PageProfile from '../setting/PageProfile'
 import PostPage from '../page/PostPage'
 import axios from 'axios';
+import { connect } from "react-redux";
 import { useLocation } from "react-router-dom"
 import MyEvent from '../../components/page/MyEvent'
 
@@ -21,7 +22,11 @@ const PageIndex = (props) => {
 
     useEffect(() => {
       const callPageData = async () =>{
-        await axios.get(`http://localhost:3001/page/${location.state.pageId}`)
+        await axios.get(`http://localhost:3001/page/${location.state.pageId}`,{
+          headers: {
+          Authorization: `Bearer ${props.token}`,
+        },
+        })
         .then((res) => {
             setPageData(res.data.result)
             setLoading(false)
@@ -68,5 +73,10 @@ const PageIndex = (props) => {
     </>
   )
 }
+const mapStateToProps = (state) => {
+  return {
+    token: state.authReducer.token,
+  };
+};
 
-export default PageIndex
+export default connect(mapStateToProps)(PageIndex)

@@ -162,7 +162,7 @@ const PageHome = (props) => {
                 <span> {event.going.length} going </span>
               </div>
               <hr />
-              <div className="row">
+              <div className="row" style={{ height: 50 }}>
                 <div className="col-6 ">
                   <div className="col-4 text-right editButton">
                     <button

@@ -21,7 +21,7 @@ router.get("/", getAllEvents);
 router.get("/follows", checkLogin, getEventLikedByUser);
 
 // GET A Event by ID
-router.get("/:id", getEventById);
+router.get("/:id", checkLogin, getEventById);
 
 // POST A Event
 router.post("/", checkLogin, fileUpload, createEvent);
